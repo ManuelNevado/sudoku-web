@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(git branch:*)",
+      "Bash(gh auth:*)",
+      "Bash(gh repo:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)",
+      "Bash(gh api:*)",
+      "Bash(start:*)",
+      "WebFetch(domain:manuelnevado.github.io)",
+      "Bash(git commit:*)",
+      "Bash(wc -l C:\\\\Users\\\\mnfst\\\\Desktop\\\\Code\\\\sudoku_web/*.html C:\\\\Users\\\\mnfst\\\\Desktop\\\\Code\\\\sudoku_web/js/*.js C:\\\\Users\\\\mnfst\\\\Desktop\\\\Code\\\\sudoku_web/css/*.css)",
+      "Bash(find C:\\\\Users\\\\mnfst\\\\Desktop\\\\Code\\\\sudoku_web:*)",
+      "Bash(ls:*)"
+    ]
+  }
+}

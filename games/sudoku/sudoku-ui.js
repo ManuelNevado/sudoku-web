@@ -1,12 +1,13 @@
 /**
  * Sudoku Game UI Controller
+ * Depends on: Sudoku (sudoku.js), Components (../../js/components.js), Theme (../../js/theme.js), Lucide
  */
-const Game = (() => {
+const SudokuGame = (() => {
   let puzzle = [];
   let solution = [];
-  let board = [];       // current player state
-  let notes = [];       // 9x9 array of Sets
-  let selected = null;  // { row, col }
+  let board = [];
+  let notes = [];
+  let selected = null;
   let difficulty = 'medium';
   let timerInterval = null;
   let seconds = 0;
@@ -19,28 +20,28 @@ const Game = (() => {
   const $$ = (sel) => document.querySelectorAll(sel);
 
   function init() {
+    Components.init('../../');
     renderBoard();
     bindEvents();
     newGame();
   }
 
-  /** Build the 9x9 grid DOM */
   function renderBoard() {
-    const grid = $('#grid');
+    const grid = $('#sudoku-grid');
     grid.innerHTML = '';
     for (let r = 0; r < 9; r++) {
       for (let c = 0; c < 9; c++) {
         const cell = document.createElement('div');
-        cell.className = 'cell';
+        cell.className = 'sudoku-cell';
         cell.dataset.row = r;
         cell.dataset.col = c;
 
         const value = document.createElement('span');
-        value.className = 'cell-value';
+        value.className = 'sudoku-cell__value';
         cell.appendChild(value);
 
         const notesDiv = document.createElement('div');
-        notesDiv.className = 'cell-notes';
+        notesDiv.className = 'sudoku-cell__notes';
         for (let n = 1; n <= 9; n++) {
           const noteSpan = document.createElement('span');
           noteSpan.dataset.note = n;
@@ -54,19 +55,14 @@ const Game = (() => {
     }
   }
 
-  /** Bind all event listeners */
   function bindEvents() {
-    // Cell clicks
-    $('#grid').addEventListener('click', (e) => {
-      const cell = e.target.closest('.cell');
+    $('#sudoku-grid').addEventListener('click', (e) => {
+      const cell = e.target.closest('.sudoku-cell');
       if (!cell || gameOver) return;
-      const row = +cell.dataset.row;
-      const col = +cell.dataset.col;
-      selectCell(row, col);
+      selectCell(+cell.dataset.row, +cell.dataset.col);
     });
 
-    // Number pad
-    $$('.num-btn').forEach(btn => {
+    $$('.sudoku-num-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         if (gameOver) return;
         const num = +btn.dataset.num;
@@ -78,32 +74,25 @@ const Game = (() => {
       });
     });
 
-    // Controls
     $('#btn-new').addEventListener('click', newGame);
     $('#btn-notes').addEventListener('click', toggleNotes);
-    $('#btn-undo').addEventListener('click', eraseCurrent);
+    $('#btn-erase').addEventListener('click', eraseCurrent);
     $('#btn-hint').addEventListener('click', giveHint);
 
-    // Difficulty selector
-    $$('.diff-btn').forEach(btn => {
+    $$('.sudoku-difficulty__btn').forEach(btn => {
       btn.addEventListener('click', () => {
         difficulty = btn.dataset.diff;
-        $$('.diff-btn').forEach(b => b.classList.remove('active'));
+        $$('.sudoku-difficulty__btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         newGame();
       });
     });
 
-    // Theme toggle
-    $('#btn-theme').addEventListener('click', toggleTheme);
-
-    // Keyboard input
     document.addEventListener('keydown', handleKeydown);
   }
 
   function handleKeydown(e) {
     if (gameOver) return;
-
     if (e.key >= '1' && e.key <= '9') {
       inputNumber(+e.key);
     } else if (e.key === 'Backspace' || e.key === 'Delete') {
@@ -121,12 +110,10 @@ const Game = (() => {
     }
   }
 
-  /** Start a new game */
   function newGame() {
-    const loadingOverlay = $('#loading-overlay');
-    if (loadingOverlay) loadingOverlay.classList.add('visible');
+    const overlay = $('#sudoku-loading');
+    if (overlay) overlay.classList.add('visible');
 
-    // Use setTimeout so the UI can repaint with the loading overlay before heavy computation
     setTimeout(() => {
       const data = Sudoku.generate(difficulty);
       puzzle = data.puzzle;
@@ -150,11 +137,10 @@ const Game = (() => {
       updateBoard();
       clearSelection();
 
-      if (loadingOverlay) loadingOverlay.classList.remove('visible');
+      if (overlay) overlay.classList.remove('visible');
     }, 50);
   }
 
-  /** Select a cell */
   function selectCell(row, col) {
     selected = { row, col };
     updateBoard();
@@ -162,16 +148,15 @@ const Game = (() => {
 
   function clearSelection() {
     selected = null;
-    $$('.cell').forEach(c => {
+    $$('.sudoku-cell').forEach(c => {
       c.classList.remove('selected', 'highlighted', 'same-number', 'same-box');
     });
   }
 
-  /** Input a number into the selected cell */
   function inputNumber(num) {
     if (!selected) return;
     const { row, col } = selected;
-    if (puzzle[row][col] !== 0) return; // given cell
+    if (puzzle[row][col] !== 0) return;
 
     if (notesMode) {
       if (notes[row][col].has(num)) {
@@ -193,7 +178,6 @@ const Game = (() => {
           return;
         }
       } else {
-        // Remove this number from notes in same row, col, box
         clearNotesFor(row, col, num);
       }
 
@@ -206,7 +190,6 @@ const Game = (() => {
     updateBoard();
   }
 
-  /** Clear notes that conflict with a placed number */
   function clearNotesFor(row, col, num) {
     for (let i = 0; i < 9; i++) {
       notes[row][i].delete(num);
@@ -221,7 +204,6 @@ const Game = (() => {
     }
   }
 
-  /** Erase the current cell */
   function eraseCurrent() {
     if (!selected) return;
     const { row, col } = selected;
@@ -231,10 +213,8 @@ const Game = (() => {
     updateBoard();
   }
 
-  /** Give a hint: fill one empty cell */
   function giveHint() {
     if (gameOver) return;
-    // Find empty cells
     const emptyCells = [];
     for (let r = 0; r < 9; r++) {
       for (let c = 0; c < 9; c++) {
@@ -249,7 +229,6 @@ const Game = (() => {
     clearNotesFor(r, c, solution[r][c]);
     selected = { row: r, col: c };
 
-    // Animate hint
     const cell = getCell(r, c);
     if (cell) {
       cell.classList.add('hint-reveal');
@@ -264,7 +243,6 @@ const Game = (() => {
     updateBoard();
   }
 
-  /** Toggle notes mode */
   function toggleNotes() {
     notesMode = !notesMode;
     updateNotesBtn();
@@ -275,28 +253,8 @@ const Game = (() => {
     btn.classList.toggle('active', notesMode);
   }
 
-  /** Toggle dark/light theme */
-  function toggleTheme() {
-    document.body.classList.toggle('dark');
-    const isDark = document.body.classList.contains('dark');
-    localStorage.setItem('sudoku-theme', isDark ? 'dark' : 'light');
-    const icon = $('#btn-theme .btn-icon');
-    if (icon) icon.textContent = isDark ? '☀️' : '🌙';
-  }
-
-  /** Load saved theme preference */
-  function loadTheme() {
-    const saved = localStorage.getItem('sudoku-theme');
-    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.body.classList.add('dark');
-      const icon = $('#btn-theme .btn-icon');
-      if (icon) icon.textContent = '☀️';
-    }
-  }
-
-  /** Update the visual board */
   function updateBoard() {
-    const cells = $$('.cell');
+    const cells = $$('.sudoku-cell');
     const selectedNum = selected && board[selected.row]?.[selected.col];
 
     cells.forEach(cell => {
@@ -304,22 +262,18 @@ const Game = (() => {
       const c = +cell.dataset.col;
       const val = board[r][c];
       const isGiven = puzzle[r][c] !== 0;
-      const valueSpan = cell.querySelector('.cell-value');
-      const notesDiv = cell.querySelector('.cell-notes');
+      const valueSpan = cell.querySelector('.sudoku-cell__value');
+      const notesDiv = cell.querySelector('.sudoku-cell__notes');
 
-      // Reset classes
-      cell.className = 'cell';
+      cell.className = 'sudoku-cell';
 
-      // Given cell
       if (isGiven) cell.classList.add('given');
 
-      // Value
       if (val !== 0) {
         valueSpan.textContent = val;
         notesDiv.style.display = 'none';
         valueSpan.style.display = '';
 
-        // Check if wrong
         if (!isGiven && val !== solution[r][c]) {
           cell.classList.add('error');
         }
@@ -328,14 +282,12 @@ const Game = (() => {
         valueSpan.style.display = 'none';
         notesDiv.style.display = '';
 
-        // Render notes
         notesDiv.querySelectorAll('span').forEach(s => {
           const n = +s.dataset.note;
           s.textContent = notes[r][c].has(n) ? n : '';
         });
       }
 
-      // Highlighting
       if (selected) {
         if (r === selected.row && c === selected.col) {
           cell.classList.add('selected');
@@ -348,18 +300,15 @@ const Game = (() => {
           cell.classList.add('same-box');
         }
 
-        // Highlight same numbers
         if (selectedNum && selectedNum !== 0 && val === selectedNum && !(r === selected.row && c === selected.col)) {
           cell.classList.add('same-number');
         }
       }
     });
 
-    // Update number pad completion
     updateNumPad();
   }
 
-  /** Dim numbers that are fully placed (9 instances) */
   function updateNumPad() {
     for (let num = 1; num <= 9; num++) {
       let count = 0;
@@ -368,17 +317,15 @@ const Game = (() => {
           if (board[r][c] === num && board[r][c] === solution[r][c]) count++;
         }
       }
-      const btn = document.querySelector(`.num-btn[data-num="${num}"]`);
+      const btn = document.querySelector(`.sudoku-num-btn[data-num="${num}"]`);
       if (btn) btn.classList.toggle('completed', count >= 9);
     }
   }
 
-  /** Get cell DOM element */
   function getCell(row, col) {
-    return document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+    return document.querySelector(`.sudoku-cell[data-row="${row}"][data-col="${col}"]`);
   }
 
-  /** Animate error */
   function animateError(row, col) {
     const cell = getCell(row, col);
     if (cell) {
@@ -387,15 +334,12 @@ const Game = (() => {
     }
   }
 
-  /** Update mistakes counter */
   function updateMistakes() {
-    $('#mistakes').textContent = `${mistakes}/${MAX_MISTAKES}`;
-    if (mistakes > 0) {
-      $('#mistakes').classList.add('has-mistakes');
-    }
+    const el = $('#sudoku-mistakes');
+    el.textContent = `${mistakes}/${MAX_MISTAKES}`;
+    el.classList.toggle('sudoku-stats__value--error', mistakes > 0);
   }
 
-  /** Timer functions */
   function startTimer() {
     timerInterval = setInterval(() => {
       seconds++;
@@ -411,10 +355,9 @@ const Game = (() => {
   function updateTimerDisplay() {
     const min = String(Math.floor(seconds / 60)).padStart(2, '0');
     const sec = String(seconds % 60).padStart(2, '0');
-    $('#timer').textContent = `${min}:${sec}`;
+    $('#sudoku-timer').textContent = `${min}:${sec}`;
   }
 
-  /** End game */
   function endGame(won) {
     gameOver = true;
     stopTimer();
@@ -422,31 +365,34 @@ const Game = (() => {
     const modal = $('#modal');
     const title = $('#modal-title');
     const msg = $('#modal-message');
+    const icon = $('#modal-icon');
 
     if (won) {
-      title.textContent = '🎉 ¡Felicidades!';
+      title.textContent = 'Completado';
       const min = Math.floor(seconds / 60);
       const sec = seconds % 60;
       msg.textContent = `Has completado el sudoku en ${min}m ${sec}s`;
-      // Celebration animation
-      document.getElementById('grid').classList.add('win-animation');
+      icon.innerHTML = '<i data-lucide="trophy"></i>';
+      icon.className = 'modal__icon';
+      $('#sudoku-grid').classList.add('win-animation');
     } else {
-      title.textContent = '😔 Game Over';
-      msg.textContent = `Has cometido ${MAX_MISTAKES} errores. ¡Inténtalo de nuevo!`;
+      title.textContent = 'Fin del juego';
+      msg.textContent = `Has cometido ${MAX_MISTAKES} errores. Intentalo de nuevo.`;
+      icon.innerHTML = '<i data-lucide="frown"></i>';
+      icon.className = 'modal__icon modal__icon--error';
     }
 
+    Components.refreshIcons();
     modal.classList.add('visible');
+
     $('#modal-btn').onclick = () => {
       modal.classList.remove('visible');
-      document.getElementById('grid').classList.remove('win-animation');
+      $('#sudoku-grid').classList.remove('win-animation');
       newGame();
     };
   }
 
-  // Initialize theme on load
-  loadTheme();
-
   return { init };
 })();
 
-document.addEventListener('DOMContentLoaded', Game.init);
+document.addEventListener('DOMContentLoaded', SudokuGame.init);

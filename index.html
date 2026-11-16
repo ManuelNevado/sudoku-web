@@ -3,110 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sudoku</title>
-  <meta name="description" content="Juega Sudoku online gratis. Puzzles generados proceduralmente con tres niveles de dificultad.">
-  <meta name="theme-color" content="#6366f1">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <title>Central de Pasatiempos</title>
+  <meta name="description" content="Tu coleccion de juegos clasicos. Sudoku, y muchos mas por venir.">
+  <meta name="theme-color" content="#d97706">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23d97706'/><text x='50' y='72' font-size='55' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>P</text></svg>">
+
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="logo">
-      <div class="logo-icon">
-        <span></span><span></span><span></span>
-        <span></span><span></span><span></span>
-        <span></span><span></span><span></span>
-      </div>
-      <h1>Sudoku</h1>
+  <!-- Site Header (injected by components.js) -->
+  <header id="site-header"></header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h2 class="hero__title">Tu coleccion de juegos clasicos</h2>
+    <p class="hero__subtitle">Elige un pasatiempo y pon a prueba tu ingenio</p>
+  </section>
+
+  <!-- Game Catalog -->
+  <main class="container">
+    <div class="games-grid" id="games-grid">
+      <a href="games/sudoku/index.html" class="game-card">
+        <div class="game-card__icon">
+          <i data-lucide="grid-3x3"></i>
+        </div>
+        <h3 class="game-card__name">Sudoku</h3>
+        <p class="game-card__desc">Rellena la cuadricula 9x9 con numeros del 1 al 9 sin repetir en filas, columnas ni bloques.</p>
+      </a>
     </div>
-    <div class="header-actions">
-      <button class="icon-btn" id="btn-theme" aria-label="Cambiar tema">
-        <span class="btn-icon">🌙</span>
-      </button>
-    </div>
-  </header>
+  </main>
 
-  <!-- Difficulty -->
-  <nav class="difficulty-bar">
-    <button class="diff-btn" data-diff="easy">Fácil</button>
-    <button class="diff-btn active" data-diff="medium">Medio</button>
-    <button class="diff-btn" data-diff="hard">Difícil</button>
-  </nav>
+  <!-- Site Footer (injected by components.js) -->
+  <footer id="site-footer"></footer>
 
-  <!-- Stats -->
-  <div class="stats-bar">
-    <div class="stat">
-      <span class="stat-label">Errores:</span>
-      <span class="stat-value" id="mistakes">0/3</span>
-    </div>
-    <div class="stat">
-      <span class="stat-label">Tiempo:</span>
-      <span class="stat-value" id="timer">00:00</span>
-    </div>
-  </div>
+  <!-- Shared JS -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/components.js"></script>
 
-  <!-- Grid -->
-  <div class="grid-container">
-    <div id="grid"></div>
-    <div class="loading-overlay" id="loading-overlay">
-      <div class="spinner"></div>
-    </div>
-  </div>
-
-  <!-- Controls -->
-  <div class="controls">
-    <button class="ctrl-btn" id="btn-undo">
-      <span class="btn-icon">✏️</span>
-      Borrar
-    </button>
-    <button class="ctrl-btn" id="btn-notes">
-      <span class="btn-icon">📝</span>
-      Notas
-    </button>
-    <button class="ctrl-btn" id="btn-hint">
-      <span class="btn-icon">💡</span>
-      Pista
-    </button>
-    <button class="ctrl-btn" id="btn-new">
-      <span class="btn-icon">🔄</span>
-      Nuevo
-    </button>
-  </div>
-
-  <!-- Number Pad -->
-  <div class="numpad">
-    <button class="num-btn" data-num="1">1</button>
-    <button class="num-btn" data-num="2">2</button>
-    <button class="num-btn" data-num="3">3</button>
-    <button class="num-btn" data-num="4">4</button>
-    <button class="num-btn" data-num="5">5</button>
-    <button class="num-btn" data-num="6">6</button>
-    <button class="num-btn" data-num="7">7</button>
-    <button class="num-btn" data-num="8">8</button>
-    <button class="num-btn" data-num="9">9</button>
-    <button class="num-btn erase-btn" data-num="0">⌫</button>
-  </div>
-
-  <!-- Win/Lose Modal -->
-  <div class="modal-overlay" id="modal">
-    <div class="modal">
-      <h2 id="modal-title"></h2>
-      <p id="modal-message"></p>
-      <button class="modal-btn" id="modal-btn">Nuevo Juego</button>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="footer">
-    Hecho con ❤️ — <a href="https://github.com/ManuelNevado/sudoku-web" target="_blank">GitHub</a>
-  </footer>
-
-  <script src="js/sudoku.js"></script>
-  <script src="js/game.js"></script>
+  <!-- Home init -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Components.init('');
+    });
+  </script>
 </body>
 </html>

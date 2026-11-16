@@ -1,21 +1,27 @@
-# Sudoku Web
+# Central de Pasatiempos
 
-Juega Sudoku online con puzzles generados proceduralmente y tres niveles de dificultad.
+Plataforma web de juegos clasicos. Puzzles y pasatiempos jugables en el navegador.
 
 **Jugar:** https://manuelnevado.github.io/sudoku-web/
 
-## Funcionalidades
+## Juegos disponibles
 
-- Generador procedural de sudokus con solución única garantizada
-- 3 niveles de dificultad: Fácil, Medio, Difícil
+### Sudoku
+- Generador procedural con solucion unica garantizada
+- 3 niveles de dificultad: Facil, Medio, Dificil
 - Sistema de notas/candidatos
 - Pistas
 - Temporizador
-- Máximo 3 errores antes de game over
+- Maximo 3 errores antes de game over
+
+## Funcionalidades generales
+
 - Tema oscuro/claro
-- Controles por teclado y ratón
-- Diseño responsive (móvil y escritorio)
+- Controles por teclado y raton
+- Diseno responsive mobile-first
+- Design system Warm Neutral + Amber
+- Iconos Lucide (sin emojis)
 
 ## Tech Stack
 
-HTML + CSS + JavaScript vanilla. Sin dependencias externas.
+HTML + CSS + JavaScript vanilla. Sin framework, sin bundler.

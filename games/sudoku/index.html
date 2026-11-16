@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudoku — Central de Pasatiempos</title>
+  <meta name="description" content="Juega Sudoku online gratis. Puzzles generados proceduralmente con tres niveles de dificultad.">
+  <meta name="theme-color" content="#d97706">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23d97706'/><text x='50' y='68' font-size='60' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>9</text></svg>">
+
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+
+  <!-- Game CSS -->
+  <link rel="stylesheet" href="sudoku.css">
+</head>
+<body>
+
+  <!-- Site Header (injected by components.js) -->
+  <header id="site-header"></header>
+
+  <!-- Difficulty -->
+  <nav class="sudoku-difficulty">
+    <button class="sudoku-difficulty__btn" data-diff="easy">Facil</button>
+    <button class="sudoku-difficulty__btn active" data-diff="medium">Medio</button>
+    <button class="sudoku-difficulty__btn" data-diff="hard">Dificil</button>
+  </nav>
+
+  <!-- Stats -->
+  <div class="sudoku-stats">
+    <div class="sudoku-stats__item">
+      <span class="sudoku-stats__label">Errores:</span>
+      <span class="sudoku-stats__value" id="sudoku-mistakes">0/3</span>
+    </div>
+    <div class="sudoku-stats__item">
+      <span class="sudoku-stats__label">Tiempo:</span>
+      <span class="sudoku-stats__value" id="sudoku-timer">00:00</span>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="sudoku-grid-container">
+    <div class="sudoku-grid" id="sudoku-grid"></div>
+    <div class="sudoku-loading" id="sudoku-loading">
+      <div class="sudoku-spinner"></div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="sudoku-controls">
+    <button class="sudoku-ctrl-btn" id="btn-erase">
+      <i data-lucide="eraser"></i>
+      Borrar
+    </button>
+    <button class="sudoku-ctrl-btn" id="btn-notes">
+      <i data-lucide="pencil-line"></i>
+      Notas
+    </button>
+    <button class="sudoku-ctrl-btn" id="btn-hint">
+      <i data-lucide="lightbulb"></i>
+      Pista
+    </button>
+    <button class="sudoku-ctrl-btn" id="btn-new">
+      <i data-lucide="refresh-cw"></i>
+      Nuevo
+    </button>
+  </div>
+
+  <!-- Number Pad -->
+  <div class="sudoku-numpad">
+    <button class="sudoku-num-btn" data-num="1">1</button>
+    <button class="sudoku-num-btn" data-num="2">2</button>
+    <button class="sudoku-num-btn" data-num="3">3</button>
+    <button class="sudoku-num-btn" data-num="4">4</button>
+    <button class="sudoku-num-btn" data-num="5">5</button>
+    <button class="sudoku-num-btn" data-num="6">6</button>
+    <button class="sudoku-num-btn" data-num="7">7</button>
+    <button class="sudoku-num-btn" data-num="8">8</button>
+    <button class="sudoku-num-btn" data-num="9">9</button>
+    <button class="sudoku-num-btn sudoku-num-btn--erase" data-num="0">
+      <i data-lucide="delete"></i>
+    </button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <div class="modal__icon" id="modal-icon">
+        <i data-lucide="trophy"></i>
+      </div>
+      <h2 class="modal__title" id="modal-title"></h2>
+      <p class="modal__message" id="modal-message"></p>
+      <button class="btn btn--primary" id="modal-btn">Nuevo Juego</button>
+    </div>
+  </div>
+
+  <!-- Site Footer (injected by components.js) -->
+  <footer id="site-footer"></footer>
+
+  <!-- Shared JS -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/components.js"></script>
+
+  <!-- Game JS -->
+  <script src="sudoku.js"></script>
+  <script src="sudoku-ui.js"></script>
+</body>
+</html>

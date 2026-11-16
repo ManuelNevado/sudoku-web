@@ -35,15 +35,12 @@ const Sudoku = (() => {
 
   /** Check if placing num at (row, col) is valid */
   function isValid(grid, row, col, num) {
-    // Check row
     for (let c = 0; c < SIZE; c++) {
       if (grid[row][c] === num) return false;
     }
-    // Check column
     for (let r = 0; r < SIZE; r++) {
       if (grid[r][col] === num) return false;
     }
-    // Check 3x3 box
     const boxRow = Math.floor(row / BOX) * BOX;
     const boxCol = Math.floor(col / BOX) * BOX;
     for (let r = boxRow; r < boxRow + BOX; r++) {
