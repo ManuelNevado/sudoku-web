@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoQuiz — Central de Pasatiempos</title>
+  <meta name="description" content="Adivina el pais, la capital y la bandera en un globo 3D interactivo.">
+  <meta name="theme-color" content="#d97706">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23d97706'/><text x='50' y='72' font-size='55' text-anchor='middle' fill='white' font-family='sans-serif'>G</text></svg>">
+
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+
+  <!-- Game CSS -->
+  <link rel="stylesheet" href="geo.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header id="site-header"></header>
+
+  <!-- Game -->
+  <div class="geo-wrapper">
+
+    <!-- Stats -->
+    <div class="geo-stats">
+      <div class="geo-stat">
+        <span class="geo-stat__value" id="geo-score">0</span>
+        <span class="geo-stat__label">Puntos</span>
+      </div>
+      <div class="geo-stat">
+        <span class="geo-stat__value" id="geo-streak">0</span>
+        <span class="geo-stat__label">Racha</span>
+      </div>
+      <div class="geo-stat">
+        <span class="geo-stat__value" id="geo-best">0</span>
+        <span class="geo-stat__label">Mejor</span>
+      </div>
+    </div>
+
+    <!-- Globe -->
+    <div class="geo-globe" id="geo-globe"></div>
+
+    <!-- Form -->
+    <div class="geo-form">
+
+      <!-- Country name -->
+      <div class="geo-field">
+        <label class="geo-field__label" for="geo-name">Pais</label>
+        <input class="geo-field__input" type="text" id="geo-name" autocomplete="off" placeholder="Escribe el nombre del pais...">
+        <div class="geo-suggestions" id="geo-name-suggestions"></div>
+      </div>
+
+      <!-- Capital -->
+      <div class="geo-field">
+        <label class="geo-field__label" for="geo-capital">Capital</label>
+        <input class="geo-field__input" type="text" id="geo-capital" autocomplete="off" placeholder="Escribe la capital...">
+        <div class="geo-suggestions" id="geo-capital-suggestions"></div>
+      </div>
+
+      <!-- Flags -->
+      <div class="geo-flags-section">
+        <span class="geo-flags-label">Bandera</span>
+        <div class="geo-flags" id="geo-flags"></div>
+      </div>
+
+      <!-- Correct answer reveal -->
+      <div class="geo-answer" id="geo-answer"></div>
+
+      <!-- Action buttons -->
+      <div class="geo-actions">
+        <button class="btn btn--primary" id="geo-check">Comprobar</button>
+        <button class="btn btn--primary" id="geo-next" style="display:none">Siguiente</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Site Footer -->
+  <footer id="site-footer"></footer>
+
+  <!-- Shared JS -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/components.js"></script>
+
+  <!-- Globe.gl (includes Three.js) -->
+  <script src="https://unpkg.com/globe.gl"></script>
+
+  <!-- Game JS -->
+  <script src="countries.js"></script>
+  <script src="geo.js"></script>
+  <script src="geo-ui.js"></script>
+</body>
+</html>
