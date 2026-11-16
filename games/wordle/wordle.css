@@ -1,0 +1,245 @@
+/* ===== Wordle Game Styles ===== */
+
+/* --- Grid --- */
+.wordle-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-md) 0;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.wordle-row {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.wordle-cell {
+  flex: 1;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: border-color var(--transition);
+  user-select: none;
+  background: var(--bg-card);
+}
+
+.wordle-cell span {
+  display: block;
+  line-height: 1;
+}
+
+/* Filled (has a letter, not yet revealed) */
+.wordle-cell--filled {
+  border-color: var(--border-strong);
+}
+
+/* Revealed states */
+.wordle-cell--revealed {
+  border-color: transparent;
+  color: #fff;
+}
+
+.wordle-cell--correct {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
+
+.wordle-cell--present {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.wordle-cell--absent {
+  background: var(--text-muted);
+  border-color: var(--text-muted);
+  color: #fff;
+}
+
+/* --- Animations --- */
+
+/* Pop on letter input */
+.wordle-cell--pop {
+  animation: wordle-pop 0.1s ease;
+}
+
+@keyframes wordle-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* Flip on reveal */
+.wordle-cell--flip {
+  animation: wordle-flip 0.5s ease;
+}
+
+@keyframes wordle-flip {
+  0% { transform: rotateX(0); }
+  50% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0); }
+}
+
+/* Bounce on win */
+.wordle-cell--bounce {
+  animation: wordle-bounce 0.6s ease;
+}
+
+@keyframes wordle-bounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-20px); }
+  60% { transform: translateY(-8px); }
+}
+
+/* Shake row on invalid */
+.wordle-row--shake {
+  animation: wordle-shake 0.4s ease;
+}
+
+@keyframes wordle-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+/* --- Keyboard --- */
+.wordle-keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-sm) var(--space-sm) var(--space-lg);
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.wordle-kb-row {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+  justify-content: center;
+}
+
+.wordle-key {
+  flex: 1;
+  max-width: 44px;
+  min-height: 52px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text);
+  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  text-transform: uppercase;
+}
+
+.wordle-key svg {
+  width: 18px;
+  height: 18px;
+}
+
+.wordle-key:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.wordle-key:active {
+  transform: translateY(0);
+}
+
+.wordle-key--wide {
+  flex: 1.5;
+  max-width: 66px;
+  font-size: var(--font-xs);
+}
+
+/* Key states */
+.wordle-key--correct {
+  background: var(--success);
+  color: #fff;
+}
+
+.wordle-key--present {
+  background: var(--accent);
+  color: #fff;
+}
+
+.wordle-key--absent {
+  background: var(--text-muted);
+  color: #fff;
+  opacity: 0.7;
+}
+
+/* --- Toast --- */
+.wordle-toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: var(--bg);
+  padding: 10px 20px;
+  border-radius: var(--radius-btn);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.wordle-toast.visible {
+  opacity: 1;
+}
+
+/* --- Responsive --- */
+@media (max-width: 400px) {
+  .wordle-grid {
+    gap: 4px;
+    max-width: 300px;
+  }
+
+  .wordle-row {
+    gap: 4px;
+  }
+
+  .wordle-key {
+    min-height: 46px;
+    font-size: clamp(0.7rem, 2.2vw, 0.85rem);
+  }
+
+  .wordle-kb-row {
+    gap: 3px;
+  }
+}
+
+@media (min-width: 600px) {
+  .wordle-grid {
+    max-width: 360px;
+  }
+
+  .wordle-key {
+    min-height: 56px;
+  }
+}

@@ -14,6 +14,14 @@ Plataforma web de juegos clasicos. Puzzles y pasatiempos jugables en el navegado
 - Temporizador
 - Maximo 3 errores antes de game over
 
+### Wordle
+- Mezcla de palabras en ingles y español (el jugador no sabe el idioma)
+- ~5000 palabras entre ambos idiomas
+- Palabra del dia (misma para todos)
+- 6 intentos para adivinar
+- Teclado virtual QWERTY con ñ
+- Progreso y estadisticas guardados en localStorage
+
 ## Funcionalidades generales
 
 - Tema oscuro/claro
