@@ -97,7 +97,7 @@ const Countries = (() => {
     {id:"IS",name:"Islandia",capital:"Reykjavik",flag:"🇮🇸",lat:65,lng:-18},
     {id:"MH",name:"Islas Marshall",capital:"Majuro",flag:"🇲🇭",lat:9,lng:168},
     {id:"SB",name:"Islas Salomón",capital:"Honiara",flag:"🇸🇧",lat:-8,lng:159},
-    {id:"IL",name:"Israel",capital:"Jerusalem",flag:"🇮🇱",lat:31.47,lng:35.13},
+    {id:"PS",name:"Palestina",capital:"Ramala",flag:"🇵🇸",lat:31.9,lng:35.2},
     {id:"IT",name:"Italia",capital:"Rome",flag:"🇮🇹",lat:42.83333333,lng:12.83333333},
     {id:"JM",name:"Jamaica",capital:"Kingston",flag:"🇯🇲",lat:18.25,lng:-77.5},
     {id:"JP",name:"Japón",capital:"Tokyo",flag:"🇯🇵",lat:36,lng:138},

@@ -146,28 +146,35 @@ const GeoGame = (() => {
   function getAltitudeForCountry(feature) {
     if (!feature) return 2;
 
-    // Estimate bounding box span of the country's geometry
-    let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
-    const coords = feature.geometry.type === 'MultiPolygon'
-      ? feature.geometry.coordinates.flat(2)
-      : feature.geometry.coordinates.flat(1);
+    // Use actual polygon area (shoelace formula) instead of bounding box
+    // This handles island nations correctly (large bbox but tiny land area)
+    const area = calcPolygonArea(feature.geometry);
 
-    for (const [lng, lat] of coords) {
-      if (lat < minLat) minLat = lat;
-      if (lat > maxLat) maxLat = lat;
-      if (lng < minLng) minLng = lng;
-      if (lng > maxLng) maxLng = lng;
-    }
-
-    const span = Math.max(maxLat - minLat, maxLng - minLng);
-
-    // Map span to altitude: tiny countries get close zoom, big ones stay far
-    if (span < 2) return 0.5;
-    if (span < 5) return 0.8;
-    if (span < 10) return 1.2;
-    if (span < 20) return 1.5;
-    if (span < 40) return 1.8;
+    if (area < 0.5) return 0.4;
+    if (area < 2) return 0.6;
+    if (area < 10) return 0.8;
+    if (area < 50) return 1.2;
+    if (area < 200) return 1.5;
+    if (area < 500) return 1.8;
     return 2;
+  }
+
+  function calcPolygonArea(geometry) {
+    const rings = geometry.type === 'MultiPolygon'
+      ? geometry.coordinates.map(poly => poly[0])
+      : [geometry.coordinates[0]];
+
+    let total = 0;
+    for (const ring of rings) {
+      // Shoelace formula (approximate, in degree^2)
+      let area = 0;
+      for (let i = 0; i < ring.length - 1; i++) {
+        area += ring[i][0] * ring[i + 1][1];
+        area -= ring[i + 1][0] * ring[i][1];
+      }
+      total += Math.abs(area) / 2;
+    }
+    return total;
   }
 
   function isCountryMatch(feature, country) {
@@ -195,7 +202,7 @@ const GeoGame = (() => {
       '254':'GF','258':'PF','262':'DJ','266':'GA','268':'GE','270':'GM','275':'PS','276':'DE',
       '288':'GH','296':'KI','300':'GR','304':'GL','308':'GD','316':'GU','320':'GT','324':'GN',
       '328':'GY','332':'HT','340':'HN','344':'HK','348':'HU','352':'IS','356':'IN','360':'ID',
-      '364':'IR','368':'IQ','372':'IE','376':'IL','380':'IT','384':'CI','388':'JM','392':'JP',
+      '364':'IR','368':'IQ','372':'IE','380':'IT','384':'CI','388':'JM','392':'JP',
       '398':'KZ','400':'JO','404':'KE','408':'KP','410':'KR','414':'KW','417':'KG','418':'LA',
       '422':'LB','426':'LS','428':'LV','430':'LR','434':'LY','438':'LI','440':'LT','442':'LU',
       '446':'MO','450':'MG','454':'MW','458':'MY','462':'MV','466':'ML','470':'MT','474':'MQ',
