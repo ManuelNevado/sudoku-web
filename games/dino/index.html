@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dino Runner — Central de Pasatiempos</title>
+  <meta name="description" content="Corre, salta y esquiva obstaculos con el dinosaurio. Un clasico endless runner.">
+  <meta name="theme-color" content="#d97706">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23d97706'/><text x='50' y='72' font-size='55' text-anchor='middle' fill='white' font-family='sans-serif'>D</text></svg>">
+
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+
+  <!-- Game CSS -->
+  <link rel="stylesheet" href="dino.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header id="site-header"></header>
+
+  <!-- Game -->
+  <div class="dino-wrapper">
+    <div class="dino-container" id="dino-container">
+      <canvas id="dino-canvas"></canvas>
+    </div>
+    <p class="dino-hint">
+      <kbd>Espacio</kbd> saltar &middot;
+      <kbd>&darr;</kbd> agacharse &middot;
+      Tap en movil
+    </p>
+  </div>
+
+  <!-- Site Footer -->
+  <footer id="site-footer"></footer>
+
+  <!-- Shared JS -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/components.js"></script>
+
+  <!-- Game JS -->
+  <script src="sprites.js"></script>
+  <script src="dino.js"></script>
+  <script src="dino-ui.js"></script>
+</body>
+</html>
